@@ -6,7 +6,7 @@
 #    By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 00:01:07 by agaley            #+#    #+#              #
-#    Updated: 2023/11/16 02:56:46 by agaley           ###   ########lyon.fr    #
+#    Updated: 2023/11/28 18:03:23 by agaley           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 MAKEFLAGS += --no-print-directory
-CFLAGS = -Wall -Wextra -Werror -pipe -g3
+CFLAGS = -Wall -Wextra -Werror -g3
 OBJ_FLAGS = ${CFLAGS}
 CC = gcc
 

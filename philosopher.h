@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:45:15 by agaley            #+#    #+#             */
-/*   Updated: 2023/11/16 02:53:41 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/11/30 01:10:02 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ typedef struct s_args
 
 typedef struct s_fork
 {
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	*mutex;
 }t_fork;
+
+typedef struct s_simu	t_simu;
 
 typedef struct s_philo
 {
@@ -46,11 +48,10 @@ typedef struct s_philo
 	int				time_to_sleep;
 	int				dead;
 	long long		last_meal_time;
+	pthread_t		thread;
 	t_fork			*l_fork;
 	t_fork			*r_fork;
-	pthread_t		*thread;
-	t_args			*args;
-	pthread_mutex_t	*log_mutex;
+	t_simu			*simu;
 }t_philo;
 
 typedef struct s_simu
@@ -58,14 +59,14 @@ typedef struct s_simu
 	t_args			*args;
 	t_philo			**philos;
 	t_fork			**forks;
-	pthread_mutex_t	*log_mutex;
+	pthread_mutex_t	log_mutex;
 	int				is_over;
 }t_simu;
 
 void		args_init(t_simu *simu, char **argv, int argc);
-int			args_validate(t_simu *simu, char **argv, int argc);
+int			args_are_valid(t_simu *simu, char **argv, int argc);
 
-void		fork_init(t_fork *fork);
+int			fork_init(t_fork *fork);
 void		fork_destroy(t_fork *fork);
 void		fork_pick(t_fork *fork);
 void		fork_drop(t_fork *fork);
@@ -81,14 +82,16 @@ void		philo_dies(t_philo *philo);
 int			is_philo_alive(t_philo *philo);
 int			has_eaten_enough(t_philo *philo);
 
+void		forks_init(t_simu *simu);
+void		philos_init(t_simu *simu);
 void		simu_init(t_simu *simu);
-void		simu_destroy(t_simu *simu);
+void		simu_destroy(t_simu *simu, int error);
 void		simu_run(t_simu *simu);
 void		simu_stop(t_simu *simu);
 int			simu_is_over(t_simu *simu);
 
-void		logger_init(pthread_mutex_t log_mutext);
-void		logger_destroy(pthread_mutex_t log_mutext);
+void		logger_init(pthread_mutex_t *log_mutext);
+void		logger_destroy(pthread_mutex_t *log_mutext);
 void		log_event(t_philo *philo, int event);
 
 long long	ft_time(void);
