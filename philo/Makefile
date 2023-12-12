@@ -6,7 +6,7 @@
 #    By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 00:01:07 by agaley            #+#    #+#              #
-#    Updated: 2023/12/11 17:15:40 by agaley           ###   ########lyon.fr    #
+#    Updated: 2023/12/12 23:42:03 by agaley           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 MAKEFLAGS += --no-print-directory
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pipe
 OBJ_FLAGS = ${CFLAGS}
 CC = gcc
 

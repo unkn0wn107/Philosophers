@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:52 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 20:17:39 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 23:15:48 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,23 @@
 
 void	philos_init(t_simu *simu)
 {
-	int	i;
-
 	simu->philos = malloc(sizeof(t_philo) * simu->args->num_philos);
 	if (!simu->philos)
 		simu_destroy(simu, 1);
-	i = 0;
-	while (i < simu->args->num_philos)
+	simu->nb_philos = 0;
+	while (simu->nb_philos < simu->args->num_philos)
 	{
-		simu->philos[i] = malloc(sizeof(t_philo));
-		if (!simu->philos[i])
+		simu->philos[simu->nb_philos] = malloc(sizeof(t_philo));
+		if (!simu->philos[simu->nb_philos])
 			simu_destroy(simu, 1);
-		philo_init(simu, i++);
+		philo_init(simu, simu->nb_philos++);
 	}
 }
 
 void	philo_init(t_simu *simu, int i)
 {
 	simu->philos[i]->id = i + 1;
-	simu->philos[i]->num_eats = 0;
+	simu->philos[i]->num_eats = -1;
 	simu->philos[i]->last_meal_time = ft_time();
 	simu->philos[i]->dead = 0;
 	simu->philos[i]->simu = simu;

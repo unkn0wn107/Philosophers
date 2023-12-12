@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:20:59 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 20:17:39 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 23:41:18 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,16 @@ long long	ft_time(void)
 
 void	ft_msleep(t_simu *simu, int time)
 {
+	int			is_over;
 	long long	start;
 
-	(void)simu;
+	is_over = 0;
 	start = ft_time();
-	while (ft_time() - start < time)
+	while (ft_time() - start < time && !is_over)
+	{
+		pthread_mutex_lock(&simu->sync_mtx);
+		is_over = simu->is_over;
+		pthread_mutex_unlock(&simu->sync_mtx);
 		usleep(1000);
+	}
 }

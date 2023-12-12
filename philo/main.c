@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:18 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 20:12:13 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 21:51:01 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	args_are_valid(t_simu *simu, char **argv, int argc)
 	free(str[3]);
 	if (argc == 6)
 		free(str[4]);
-	if (result == 1
-		&& (simu->args->num_philos < 0 || simu->args->time_to_die < 0
-			|| simu->args->time_to_eat < 0 || simu->args->time_to_sleep < 0))
+	if (result == 1 && (simu->args->num_philos < 0
+			|| simu->args->time_to_die < 0 || simu->args->time_to_eat < 0
+			|| simu->args->time_to_sleep < 0 || simu->args->min_eats < -1))
 		result = 0;
 	return (result);
 }

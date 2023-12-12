@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:38 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 20:17:39 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 23:42:34 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	simu_destroy(t_simu *simu, int error)
 	if (simu->forks)
 		free(simu->forks);
 	i = 0;
-	while (i < simu->nb_threads)
+	while (i < simu->nb_philos)
 		free(simu->philos[i++]);
 	if (simu->philos)
 		free(simu->philos);
@@ -60,27 +60,31 @@ void	simu_destroy(t_simu *simu, int error)
 		exit(EXIT_FAILURE);
 }
 
+int	simu_is_over(t_simu *simu)
+{
+	int	is_over;
+
+	pthread_mutex_lock(&simu->sync_mtx);
+	is_over = simu->is_over;
+	pthread_mutex_unlock(&simu->sync_mtx);
+	return (is_over);
+}
+
 void	*philo_cycle(void *arg)
 {
 	t_philo	*philo;
 	int		is_over;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->simu->sync_mtx);
-	is_over = philo->simu->is_over;
-	pthread_mutex_unlock(&philo->simu->sync_mtx);
-	while (!is_over)
+	is_over = simu_is_over(philo->simu);
+	while (!is_over && !philo->dead)
 	{
 		philo_think(philo);
-		pthread_mutex_lock(&philo->simu->sync_mtx);
-		is_over = philo->simu->is_over;
-		pthread_mutex_unlock(&philo->simu->sync_mtx);
-		if (!is_over)
+		is_over = simu_is_over(philo->simu);
+		if (!is_over && !philo->dead)
 			philo_eat(philo);
-		pthread_mutex_lock(&philo->simu->sync_mtx);
-		is_over = philo->simu->is_over;
-		pthread_mutex_unlock(&philo->simu->sync_mtx);
-		if (!is_over)
+		is_over = simu_is_over(philo->simu);
+		if (!is_over && !philo->dead)
 			philo_sleep(philo);
 	}
 	if (philo->dead)

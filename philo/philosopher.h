@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:45:15 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 20:17:55 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 23:15:28 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_simu
 	pthread_mutex_t	sync_mtx;
 	int				nb_threads;
 	int				nb_forks;
+	int				nb_philos;
 	int				is_over;
 	long long		start_time;
 }t_simu;
