@@ -22,7 +22,8 @@ void	log_event(t_philo *philo, int event)
 	msg[E_THINK] = "is thinking";
 	msg[E_DIED] = "died";
 	pthread_mutex_lock(&philo->simu->log_mutex);
-	printf("%lld %d %s\n", ft_time() - philo->simu->start_time,
-		philo->id, msg[event]);
+	if (!philo->simu->is_over || event == E_DIED)
+		printf("%lld %d %s\n", ft_time() - philo->simu->start_time,
+			philo->id, msg[event]);
 	pthread_mutex_unlock(&philo->simu->log_mutex);
 }

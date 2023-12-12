@@ -59,7 +59,9 @@ void	simu_destroy(t_simu *simu, int error)
 {
 	int	i;
 
+	pthread_mutex_lock(&simu->log_mutex);
 	simu->is_over = 1;
+	pthread_mutex_unlock(&simu->log_mutex);
 	i = 0;
 	while (i < simu->nb_threads)
 		pthread_join(simu->philos[i++]->thread, NULL);
@@ -81,29 +83,30 @@ void	simu_destroy(t_simu *simu, int error)
 void	*philo_cycle(void *arg)
 {
 	t_philo	*philo;
+	int		is_over;
 
 	philo = (t_philo *)arg;
-	while (!philo->dead)
+	pthread_mutex_lock(&philo->simu->log_mutex);
+	is_over = philo->simu->is_over;
+	pthread_mutex_unlock(&philo->simu->log_mutex);
+	while (!is_over)
 	{
-		if (!philo->simu->is_over)
-			philo_think(philo);
-		if (!philo->simu->is_over)
+		philo_think(philo);
+		pthread_mutex_lock(&philo->simu->log_mutex);
+		is_over = philo->simu->is_over;
+		pthread_mutex_unlock(&philo->simu->log_mutex);
+		if (!is_over)
 			philo_eat(philo);
-		if (!philo->simu->is_over)
+		pthread_mutex_lock(&philo->simu->log_mutex);
+		is_over = philo->simu->is_over;
+		pthread_mutex_unlock(&philo->simu->log_mutex);
+		if (!is_over)
 			philo_sleep(philo);
-		if (!philo->dead && philo->simu->is_over)
-			pthread_exit(NULL);
 	}
-	philo_dies(philo);
+	if (philo->dead)
+		log_event(philo, E_DIED);
 	pthread_exit(NULL);
 	return (NULL);
-}
-
-void	simu_over_set_philos(t_simu *simu, int philo_id, int dead)
-{
-	if (dead)
-		philo_dies(simu->philos[philo_id]);
-	simu->is_over = 1;
 }
 
 void	simu_run(t_simu *simu)
@@ -123,11 +126,18 @@ void	simu_run(t_simu *simu)
 		while (!simu->is_over && i < simu->args->num_philos)
 		{
 			if (!is_philo_alive(simu->philos[i]))
+			{
+				pthread_mutex_lock(&simu->log_mutex);
 				simu->is_over = 1;
+				pthread_mutex_unlock(&simu->log_mutex);
+			}
 			if (has_eaten_enough(simu->philos[i]))
+			{
+				pthread_mutex_lock(&simu->log_mutex);
 				simu->is_over = 1;
-			i++;
+				pthread_mutex_unlock(&simu->log_mutex);
+			}			i++;
 		}
-		ft_usleep(simu, 10);
+		ft_usleep(simu, 5);
 	}
 }

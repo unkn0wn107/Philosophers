@@ -58,7 +58,3 @@ void	philo_think(t_philo *philo)
 	log_event(philo, E_THINK);
 }
 
-void	philo_dies(t_philo *philo)
-{
-	log_event(philo, E_DIED);
-}
