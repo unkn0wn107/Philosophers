@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:45:15 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/11 18:24:12 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 20:17:55 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ typedef struct s_simu
 	t_args			*args;
 	t_philo			**philos;
 	t_fork			**forks;
-	pthread_mutex_t	log_mutex;
+	pthread_mutex_t	log_mtx;
+	pthread_mutex_t	sync_mtx;
 	int				nb_threads;
 	int				nb_forks;
 	int				is_over;
@@ -93,12 +94,12 @@ void		simu_run(t_simu *simu);
 void		simu_stop(t_simu *simu);
 int			simu_is_over(t_simu *simu);
 
-void		logger_init(pthread_mutex_t *log_mutext);
-void		logger_destroy(pthread_mutex_t *log_mutext);
+void		logger_init(pthread_mutex_t *sync_mtxt);
+void		logger_destroy(pthread_mutex_t *sync_mtxt);
 void		log_event(t_philo *philo, int event);
 
 long long	ft_time(void);
-void		ft_usleep(t_simu *simu, int length);
+void		ft_msleep(t_simu *simu, int time);
 int			ft_atoi(const char *str);
 char		*ft_itoa(int nbr);
 int			ft_strcmp(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:18 by agaley            #+#    #+#             */
-/*   Updated: 2023/11/29 23:20:24 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 20:12:13 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	main(int argc, char **argv)
 	if (!args_are_valid(simu, argv, argc))
 		return (EXIT_FAILURE);
 	simu_init(simu);
-	simu_run(simu);
+	if (simu->args->num_philos > 1)
+		simu_run(simu);
 	simu_destroy(simu, 0);
 	return (EXIT_SUCCESS);
 }

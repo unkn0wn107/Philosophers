@@ -6,11 +6,26 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:43:24 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/11 17:11:21 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 19:29:26 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+void	forks_init(t_simu *simu)
+{
+	simu->forks = malloc(sizeof(t_fork *) * simu->args->num_philos);
+	if (!simu->forks)
+		simu_destroy(simu, 1);
+	while (simu->nb_forks < simu->args->num_philos)
+	{
+		simu->forks[simu->nb_forks] = malloc(sizeof(t_fork));
+		if (!simu->forks[simu->nb_forks])
+			simu_destroy(simu, 1);
+		if (!fork_init(simu->forks[simu->nb_forks++]))
+			simu_destroy(simu, 1);
+	}
+}
 
 int	fork_init(t_fork *fork)
 {

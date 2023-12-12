@@ -6,11 +6,28 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:52 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/11 18:27:51 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/12 20:17:39 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+void	philos_init(t_simu *simu)
+{
+	int	i;
+
+	simu->philos = malloc(sizeof(t_philo) * simu->args->num_philos);
+	if (!simu->philos)
+		simu_destroy(simu, 1);
+	i = 0;
+	while (i < simu->args->num_philos)
+	{
+		simu->philos[i] = malloc(sizeof(t_philo));
+		if (!simu->philos[i])
+			simu_destroy(simu, 1);
+		philo_init(simu, i++);
+	}
+}
 
 void	philo_init(t_simu *simu, int i)
 {
@@ -39,10 +56,12 @@ void	philo_eat(t_philo *philo)
 		fork_pick(philo->l_fork);
 		log_event(philo, E_PICK_FORK);
 	}
+	pthread_mutex_lock(&philo->simu->sync_mtx);
 	philo->last_meal_time = ft_time();
 	philo->num_eats++;
+	pthread_mutex_unlock(&philo->simu->sync_mtx);
 	log_event(philo, E_EAT);
-	ft_usleep(philo->simu, philo->simu->args->time_to_eat); // Boucle sleep pour arreter la simulation
+	ft_msleep(philo->simu, philo->simu->args->time_to_eat);
 	fork_drop(philo->l_fork);
 	fork_drop(philo->r_fork);
 }
@@ -50,11 +69,10 @@ void	philo_eat(t_philo *philo)
 void	philo_sleep(t_philo *philo)
 {
 	log_event(philo, E_SLEEP);
-	ft_usleep(philo->simu, philo->simu->args->time_to_sleep);
+	ft_msleep(philo->simu, philo->simu->args->time_to_sleep);
 }
 
 void	philo_think(t_philo *philo)
 {
 	log_event(philo, E_THINK);
 }
-
