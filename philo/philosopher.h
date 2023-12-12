@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:45:15 by agaley            #+#    #+#             */
-/*   Updated: 2023/11/30 01:10:02 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/11 18:24:12 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ typedef struct s_simu
 	t_philo			**philos;
 	t_fork			**forks;
 	pthread_mutex_t	log_mutex;
+	int				nb_threads;
+	int				nb_forks;
 	int				is_over;
+	long long		start_time;
 }t_simu;
 
 void		args_init(t_simu *simu, char **argv, int argc);
@@ -95,7 +98,7 @@ void		logger_destroy(pthread_mutex_t *log_mutext);
 void		log_event(t_philo *philo, int event);
 
 long long	ft_time(void);
-void		ft_usleep(int length);
+void		ft_usleep(t_simu *simu, int length);
 int			ft_atoi(const char *str);
 char		*ft_itoa(int nbr);
 int			ft_strcmp(char *s1, char *s2);

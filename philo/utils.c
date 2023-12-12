@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:20:59 by agaley            #+#    #+#             */
-/*   Updated: 2023/11/16 02:19:40 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/11 18:25:22 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ long long	ft_time(void)
 	return ((tv.tv_sec * (long long)1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(int length)
+void	ft_usleep(t_simu *simu, int length)
 {
-	usleep(length * 1000);
+	long long	start;
+
+	start = ft_time();
+	while (ft_time() - start < length && !simu->is_over)
+		usleep(1000);
 }

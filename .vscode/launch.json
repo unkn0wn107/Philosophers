@@ -8,9 +8,9 @@
 			"type": "lldb",
 			"request": "launch",
 			"name": "Debug",
-			"program": "${workspaceFolder}/philo",
-			"args": ["1", "800", "200", "200"],
-			"cwd": "${workspaceFolder}",
+			"program": "${workspaceFolder}/philo/philo",
+			"args": ["5", "100", "200", "200"],
+			"cwd": "${workspaceFolder}/philo",
 			"preLaunchTask": "build"
 		},
 		{

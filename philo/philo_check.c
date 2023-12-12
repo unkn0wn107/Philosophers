@@ -1,50 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork.c                                             :+:      :+:    :+:   */
+/*   philo_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 22:43:24 by agaley            #+#    #+#             */
-/*   Updated: 2023/11/19 23:57:46 by agaley           ###   ########lyon.fr   */
+/*   Created: 2023/11/16 02:19:10 by agaley            #+#    #+#             */
+/*   Updated: 2023/12/11 18:13:26 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int	fork_init(t_fork *fork)
+int	has_eaten_enough(t_philo *philo)
 {
-	fork->mutex = malloc(sizeof(pthread_mutex_t));
-	if (!fork->mutex)
-	{
-		free(fork);
+	if (philo->simu->args->min_eats == 0
+		|| philo->simu->args->min_eats < philo->num_eats)
 		return (0);
-	}
-	if (pthread_mutex_init(fork->mutex, NULL))
-	{
-		free(fork->mutex);
-		free(fork);
-		return (0);
-	}
 	return (1);
 }
 
-void	fork_destroy(t_fork *fork)
+int	is_philo_alive(t_philo *philo)
 {
-	if (fork->mutex)
+	if (ft_time() - philo->last_meal_time > philo->simu->args->time_to_die)
 	{
-		pthread_mutex_destroy(fork->mutex);
-		free(fork->mutex);
+		philo->dead = 1;
+		return (0);
 	}
-	free(fork);
-}
-
-void	fork_pick(t_fork *fork)
-{
-	pthread_mutex_lock(fork->mutex);
-}
-
-void	fork_drop(t_fork *fork)
-{
-	pthread_mutex_unlock(fork->mutex);
+	return (1);
 }
