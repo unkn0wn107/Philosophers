@@ -20,6 +20,8 @@
 # include <pthread.h>
 
 typedef struct s_simu	t_simu;
+typedef struct s_philo	t_philo;
+typedef pthread_mutex_t	t_fork;
 
 // Args parsing
 typedef struct s_args
@@ -34,10 +36,9 @@ void		args_init(t_simu *simu, char **argv, int argc);
 int			args_are_valid(t_simu *simu, char **argv, int argc);
 
 // Forks
-typedef pthread_mutex_t	t_fork;
 void		forks_init(t_simu *simu);
 void		forks_destroy(t_simu *simu);
-void		fork_pick(t_fork *fork);
+void		fork_pick(t_fork *fork, t_philo *philo);
 void		fork_drop(t_fork *fork);
 
 // Philosopher

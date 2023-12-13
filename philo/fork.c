@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:43:24 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 19:29:26 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/13 23:10:55 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void	forks_destroy(t_simu *simu)
 	free(simu->forks);
 }
 
-void	fork_pick(t_fork *fork)
+void	fork_pick(t_fork *fork, t_philo *philo)
 {
 	pthread_mutex_lock(fork);
+	log_event(philo, E_PICK_FORK);
 }
 
 void	fork_drop(t_fork *fork)

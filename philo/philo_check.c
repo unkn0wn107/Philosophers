@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 02:19:10 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/13 19:38:20 by agaley           ###   ########.fr       */
+/*   Updated: 2023/12/13 23:18:55 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*check_philos(void *arg)
 	simu = (t_simu *)arg;
 	while (!simu->is_over)
 	{
-		usleep(4000);
+		usleep(3000);
 		i = 0;
 		pthread_mutex_lock(&simu->sync_mtx);
 		while (!simu->is_over && i < simu->args->num_philos)
