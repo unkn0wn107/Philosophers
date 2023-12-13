@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:52 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/13 23:16:51 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/13 23:36:00 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,19 +70,24 @@ void	*philo_cycle(void *arg)
 {
 	t_philo	*philo;
 	int		is_over;
+	int		start;
 
 	philo = (t_philo *)arg;
 	is_over = 0;
+	start = 1;
 	while (!is_over && !philo->dead)
 	{
 		log_event(philo, E_THINK);
-		if (philo->id % 2 == 0)
-			usleep(1000);
+		if (philo->id % 2 == 0 && start)
+		{
+			start = 0;
+			usleep(1000 * philo->simu->args->time_to_eat / 1.2);
+		}
 		if (!philo_is_dead(philo))
 			philo_eat(philo);
 		if (!philo_is_dead(philo))
 			philo_sleep(philo);
-		usleep(1000);
+		// usleep(1000);
 		is_over = simu_is_over(philo->simu);
 	}
 	if (philo_is_dead(philo))
