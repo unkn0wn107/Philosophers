@@ -6,7 +6,7 @@
 #    By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 00:01:07 by agaley            #+#    #+#              #
-#    Updated: 2023/12/12 23:42:03 by agaley           ###   ########lyon.fr    #
+#    Updated: 2023/12/13 17:49:35 by agaley           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ CC = gcc
 
 all:					${NAME}
 
-${NAME}:				mkdir ${OBJ} ${OBJS} $(H)
+${NAME}:				${OBJ_DIR} ${OBJ} ${OBJS} $(H)
 		${CC} ${CFLAGS} ${OBJ} ${OBJS} -lpthread -o $@
 
 $(OBJ_DIR)/%.o:			%.c $(H)
@@ -42,7 +42,7 @@ check:
 static:					fclean
 		csbuild -c make
 
-mkdir:
+${OBJ_DIR}:
 		@mkdir -p $(OBJ_DIR)
 
 clean:
