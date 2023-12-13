@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:38 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 23:42:34 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/13 19:48:50 by agaley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,7 @@ void	simu_destroy(t_simu *simu, int error)
 	i = 0;
 	while (i < simu->nb_threads)
 		pthread_join(simu->philos[i++]->thread, NULL);
-	i = 0;
-	while (simu->forks && i < simu->nb_forks)
-		fork_destroy(simu->forks[i++]);
-	if (simu->forks)
-		free(simu->forks);
+	forks_destroy(simu);
 	i = 0;
 	while (i < simu->nb_philos)
 		free(simu->philos[i++]);
@@ -70,33 +66,8 @@ int	simu_is_over(t_simu *simu)
 	return (is_over);
 }
 
-void	*philo_cycle(void *arg)
-{
-	t_philo	*philo;
-	int		is_over;
-
-	philo = (t_philo *)arg;
-	is_over = simu_is_over(philo->simu);
-	while (!is_over && !philo->dead)
-	{
-		philo_think(philo);
-		is_over = simu_is_over(philo->simu);
-		if (!is_over && !philo->dead)
-			philo_eat(philo);
-		is_over = simu_is_over(philo->simu);
-		if (!is_over && !philo->dead)
-			philo_sleep(philo);
-	}
-	if (philo->dead)
-		log_event(philo, E_DIED);
-	pthread_exit(NULL);
-	return (NULL);
-}
-
 void	simu_run(t_simu *simu)
 {
-	int	i;
-
 	while (simu->nb_threads < simu->args->num_philos)
 	{
 		if (pthread_create(&simu->philos[simu->nb_threads]->thread, NULL,
@@ -104,17 +75,5 @@ void	simu_run(t_simu *simu)
 			simu_destroy(simu, 1);
 		simu->nb_threads++;
 	}
-	while (!simu->is_over)
-	{
-		i = 0;
-		while (!simu->is_over && i < simu->args->num_philos)
-		{
-			if (!is_philo_alive(simu->philos[i]))
-				simu_set_over(simu);
-			if (has_eaten_enough(simu->philos[i]))
-				simu_set_over(simu);
-			i++;
-		}
-		ft_msleep(simu, 20);
-	}
+	check_philos(simu);
 }

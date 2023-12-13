@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:52 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 23:15:48 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/13 19:30:15 by agaley           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ void	philo_init(t_simu *simu, int i)
 	simu->philos[i]->last_meal_time = ft_time();
 	simu->philos[i]->dead = 0;
 	simu->philos[i]->simu = simu;
-	simu->philos[i]->l_fork = simu->forks[i];
-	simu->philos[i]->r_fork = simu->forks[(i + 1) % simu->args->num_philos];
+	simu->philos[i]->l_fork = &simu->forks[i];
+	simu->philos[i]->r_fork = &simu->forks[(i + 1) % simu->args->num_philos];
 }
 
 void	philo_eat(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 != 0)
 	{
 		fork_pick(philo->l_fork);
 		log_event(philo, E_PICK_FORK);
@@ -70,7 +70,26 @@ void	philo_sleep(t_philo *philo)
 	ft_msleep(philo->simu, philo->simu->args->time_to_sleep);
 }
 
-void	philo_think(t_philo *philo)
+void	*philo_cycle(void *arg)
 {
-	log_event(philo, E_THINK);
+	t_philo	*philo;
+	int		is_over;
+
+	philo = (t_philo *)arg;
+	is_over = 0;
+	while (!is_over && !philo->dead)
+	{
+		log_event(philo, E_THINK);
+		if (philo->id % 2)
+			usleep(1000);
+		if (!philo_is_dead(philo))
+			philo_eat(philo);
+		if (!philo_is_dead(philo))
+			philo_sleep(philo);
+		is_over = simu_is_over(philo->simu);
+	}
+	if (philo_is_dead(philo))
+		log_event(philo, E_DIED);
+	pthread_exit(NULL);
+	return (NULL);
 }
