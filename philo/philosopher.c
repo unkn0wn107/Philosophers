@@ -25,7 +25,7 @@ void	philos_init(t_simu *simu)
 void	philo_init(t_simu *simu, int i)
 {
 	simu->philos[i].id = i + 1;
-	simu->philos[i].num_eats = 0;
+	simu->philos[i].num_eats = -1;
 	simu->philos[i].dead = 0;
 	simu->philos[i].simu = simu;
 	simu->philos[i].l_fork = &simu->forks[i];
