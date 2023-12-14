@@ -60,19 +60,16 @@ int	args_are_valid(t_simu *simu, char **argv, int argc)
 	str[4] = '\0';
 	if (argc == 6)
 		str[4] = ft_itoa(simu->args->min_eats);
-	if (ft_strcmp(argv[1], str[0]) || ft_strcmp(argv[2], str[1])
+	if (!str[0] || !str[1] || !str[2] || !str[3]
+		|| ft_strcmp(argv[1], str[0]) || ft_strcmp(argv[2], str[1])
 		|| ft_strcmp(argv[3], str[2]) || ft_strcmp(argv[4], str[3])
 		|| (argc == 6 && ft_strcmp(argv[5], str[4])))
 		result = 0;
-	free(str[0]);
-	free(str[1]);
-	free(str[2]);
-	free(str[3]);
 	if (argc == 6)
 		free(str[4]);
-	if (result == 1 && (simu->args->num_philos < 0
+	if (result == 1 && (simu->args->num_philos <= 0
 			|| simu->args->time_to_die < 0 || simu->args->time_to_eat < 0
 			|| simu->args->time_to_sleep < 0 || simu->args->min_eats < -1))
 		result = 0;
-	return (result);
+	return (free(str[0]), free(str[1]), free(str[2]), free(str[3]), result);
 }

@@ -62,7 +62,7 @@ void		philo_sleep(t_philo *philo);
 void		*philo_cycle(void *arg);
 
 // Philosopher checking
-void		*check_philos(void *arg);
+void		check_philos(t_simu *simu);
 int			philo_is_dead(t_philo *philo);
 # define ODD 1
 # define EVEN 0
@@ -75,8 +75,6 @@ typedef struct s_simu
 	t_fork			*forks;
 	pthread_mutex_t	log_mtx;
 	pthread_mutex_t	sync_mtx;
-	pthread_mutex_t	start_odd_mtx;
-	pthread_mutex_t	start_even_mtx;
 	int				nb_thrds_odd;
 	int				nb_thrds_even;
 	int				nb_forks;

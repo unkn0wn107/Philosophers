@@ -26,13 +26,15 @@ void	philo_init(t_simu *simu, int i)
 {
 	simu->philos[i].id = i + 1;
 	simu->philos[i].num_eats = 0;
-	simu->philos[i].last_meal_time = ft_time();
 	simu->philos[i].dead = 0;
 	simu->philos[i].simu = simu;
 	simu->philos[i].l_fork = &simu->forks[i];
 	simu->philos[i].r_fork = &simu->forks[(i + 1) % simu->args->num_philos];
 	if (pthread_mutex_init(&simu->philos[i].mtx, NULL))
 		simu_destroy(simu, ERR);
+	pthread_mutex_lock(&simu->philos[i].mtx);
+	simu->philos[i].last_meal_time = ft_time();
+	pthread_mutex_unlock(&simu->philos[i].mtx);
 	simu->nb_phi_mtx++;
 }
 
@@ -70,16 +72,9 @@ void	*philo_cycle(void *arg)
 	int		is_over;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(&philo->simu->start_even_mtx);
-		pthread_mutex_unlock(&philo->simu->start_even_mtx);
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->simu->start_odd_mtx);
-		pthread_mutex_unlock(&philo->simu->start_odd_mtx);
-	}
+	pthread_mutex_lock(&philo->mtx);
+	philo->last_meal_time = ft_time();
+	pthread_mutex_unlock(&philo->mtx);
 	is_over = 0;
 	while (!is_over && !philo->dead)
 	{
