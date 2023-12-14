@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:43:24 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/13 23:10:55 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/14 01:42:31 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	forks_init(t_simu *simu)
 {
 	simu->forks = malloc(sizeof(t_fork) * simu->args->num_philos);
 	if (!simu->forks)
-		simu_destroy(simu, 1);
+		simu_destroy(simu, ERR);
 	while (simu->nb_forks < simu->args->num_philos)
 		if (pthread_mutex_init(&simu->forks[simu->nb_forks++], NULL))
-			simu_destroy(simu, 1);
+			simu_destroy(simu, ERR);
 }
 
 void	forks_destroy(t_simu *simu)

@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 22:45:15 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/13 17:25:14 by agaley           ###   ########.fr       */
+/*   Updated: 2023/12/14 02:26:14 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_philo
 	int				dead;
 	long long		last_meal_time;
 	pthread_t		thread;
+	pthread_mutex_t	mtx;
 	t_fork			*l_fork;
 	t_fork			*r_fork;
 	t_simu			*simu;
@@ -63,18 +64,24 @@ void		*philo_cycle(void *arg);
 // Philosopher checking
 void		*check_philos(void *arg);
 int			philo_is_dead(t_philo *philo);
+# define ODD 1
+# define EVEN 0
 
 // Simulation
 typedef struct s_simu
 {
 	t_args			*args;
-	t_philo			**philos;
+	t_philo			*philos;
 	t_fork			*forks;
 	pthread_mutex_t	log_mtx;
 	pthread_mutex_t	sync_mtx;
-	int				nb_threads;
+	pthread_mutex_t	start_odd_mtx;
+	pthread_mutex_t	start_even_mtx;
+	int				nb_thrds_odd;
+	int				nb_thrds_even;
 	int				nb_forks;
 	int				nb_philos;
+	int				nb_phi_mtx;
 	int				is_over;
 	long long		start_time;
 }t_simu;
@@ -83,6 +90,8 @@ void		simu_destroy(t_simu *simu, int error);
 void		simu_run(t_simu *simu);
 void		simu_set_over(t_simu *simu);
 int			simu_is_over(t_simu *simu);
+# define ERR 1
+# define OK 0
 
 // Logger
 void		logger_init(pthread_mutex_t *sync_mtxt);

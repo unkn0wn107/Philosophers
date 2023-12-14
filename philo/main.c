@@ -6,7 +6,7 @@
 /*   By: agaley <agaley@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 19:11:18 by agaley            #+#    #+#             */
-/*   Updated: 2023/12/12 21:51:01 by agaley           ###   ########lyon.fr   */
+/*   Updated: 2023/12/14 02:16:36 by agaley           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 	simu_init(simu);
 	if (simu->args->num_philos > 1)
 		simu_run(simu);
-	simu_destroy(simu, 0);
+	simu_destroy(simu, OK);
 	return (EXIT_SUCCESS);
 }
 
@@ -57,6 +57,7 @@ int	args_are_valid(t_simu *simu, char **argv, int argc)
 	str[1] = ft_itoa(simu->args->time_to_die);
 	str[2] = ft_itoa(simu->args->time_to_eat);
 	str[3] = ft_itoa(simu->args->time_to_sleep);
+	str[4] = '\0';
 	if (argc == 6)
 		str[4] = ft_itoa(simu->args->min_eats);
 	if (ft_strcmp(argv[1], str[0]) || ft_strcmp(argv[2], str[1])
